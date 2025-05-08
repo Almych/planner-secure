@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <section class="nav-bar">
+            <input type="text" placeholder="Enter text...">
+           <select name="Filter" id="filter-button">
+            <option value="title">filter by title</option>
+            <option value="date">filter by date</option>
+            <option value="status">filter by status</option>
+           </select>
+           <button id="add-button">create plan</button>
+        </section>
+    </header>
+    <main>
+        <section id="plan-bar">
+            <section id="plan-container">
+            </section>
+        </section>
+    </main>
+    
+    <dialog id="plan-dialog">
+        <section id="dialog-container">
+         <input type="text" placeholder="Set title!" maxlength="15" id="dialog-title" class="text-setter hidden-input">
+         <input type="text" placeholder="Set description!" maxlength="30" id="dialog-desc" class="text-setter hidden-input">
+         <select name="category" id="category">
+             <option value="work">work</option>
+             <option value="hobby">hobby</option>
+             <option value="free">free</option>
+             <option value="other">create new</option>
+         </select>
+         <input type="datetime-local" id="datetime" class="hidden-input">
+         <section class="dialog-action">
+             <button id="cancel-button">Cancel</button>
+             <button id="create-button">Create</button>
+         </section>
+        </section>
+     </dialog>
+
+     <dialog id="plan-card">
+         
+     </dialog>
+     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+     <script src="main.js"></script>     
+</body>
+</html>

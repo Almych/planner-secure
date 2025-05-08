@@ -1,2 +1,1 @@
-# planner-secure
-SImple fun application to share your plans
+JOHN SAVES ME IN GOD ARMPITS!!!
