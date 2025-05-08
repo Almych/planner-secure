@@ -69,14 +69,7 @@ function initializeApp(tasksRef) {
         }
     
         // Apply filter
-        if (currentFilter === "completed") {
-            filtered = filtered.filter(t => t.completed);
-        } else if (currentFilter === "incomplete") {
-            filtered = filtered.filter(t => !t.completed);
-        } else {
-            // Default: hide completed unless explicitly filtered
-            filtered = filtered.filter(t => !t.completed);
-        }
+      
     
         // Apply sort
         if (currentSort === "title") {
@@ -84,7 +77,14 @@ function initializeApp(tasksRef) {
         } else if (currentSort === "date") {
             filtered.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
         } else if (currentSort === "status") {
-            filtered.sort((a, b) => a.completed - b.completed);
+            if (currentFilter === "completed") {
+                filtered = filtered.filter(t => t.completed);
+            } else if (currentFilter === "incomplete") {
+                filtered = filtered.filter(t => !t.completed);
+            } else {
+                // Default: hide completed unless explicitly filtered
+                filtered = filtered.filter(t => !t.completed);
+            }
         }
     
         filtered.forEach(task => container.appendChild(createTaskElement(task)));
