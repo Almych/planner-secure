@@ -25,54 +25,60 @@ function initializeApp(tasksRef) {
     const categoryDialog = document.getElementById("category");
     const deadlineDialog = document.getElementById("datetime");
     const filterSelect = document.getElementById("filter-select");
-const sortSelect = document.getElementById("sort-select");
-const titleInput = document.getElementById("title-input");
-
+    const sortSelect = document.getElementById("sort-select");
+    const titleInput = document.getElementById("title-input");
 
     let tasks = [];
     tasksRef.on("value", (snapshot) => {
-      tasks = snapshot.val() || [];
-      renderTasks();
+        tasks = snapshot.val() || [];
+        renderTasks();
     });
-    
+
     let selectedTaskIds = new Set();
     let lastSelectedIndex = null;
     let currentFilter = new URLSearchParams(location.search).get("filter") || "all";
     let currentSort = new URLSearchParams(location.search).get("sort") || "date";
 
-    // Save tasks to localStorage
     function saveTasks() {
         tasksRef.set(tasks);
-      }
-      
+    }
 
-    // Update URL query string to reflect current filter and sort
     function updateURLState() {
         const params = new URLSearchParams();
         params.set("filter", currentFilter);
         params.set("sort", currentSort);
         history.replaceState(null, "", "?" + params.toString());
     }
+
     function clearDialog() {
         titleDialog.value = "";
         descDialog.value = "";
         categoryDialog.value = "work";
         deadlineDialog.value = "";
     }
-    // Render tasks based on filter and sort
+
     function renderTasks() {
-        container.innerHTML = ""; // Clear existing tasks
+        container.innerHTML = "";
     
         let filtered = [...tasks];
     
-        // Apply filter logic
+        // Apply title search first
+        if (titleInput.value.trim() !== "") {
+            const q = titleInput.value.trim().toLowerCase();
+            filtered = filtered.filter(task => task.title.toLowerCase().includes(q));
+        }
+    
+        // Apply filter
         if (currentFilter === "completed") {
             filtered = filtered.filter(t => t.completed);
         } else if (currentFilter === "incomplete") {
             filtered = filtered.filter(t => !t.completed);
+        } else {
+            // Default: hide completed unless explicitly filtered
+            filtered = filtered.filter(t => !t.completed);
         }
     
-        // Apply sorting logic
+        // Apply sort
         if (currentSort === "title") {
             filtered.sort((a, b) => a.title.localeCompare(b.title));
         } else if (currentSort === "date") {
@@ -80,13 +86,7 @@ const titleInput = document.getElementById("title-input");
         } else if (currentSort === "status") {
             filtered.sort((a, b) => a.completed - b.completed);
         }
-
-
-        if (titleInput.value.trim() !== "") {
-            filtered = filtered.filter(task => task.title.toLowerCase().includes(titleInput.value.trim().toLowerCase()));
-        }
     
-        // Render filtered and sorted tasks
         filtered.forEach(task => container.appendChild(createTaskElement(task)));
     }
     
@@ -96,24 +96,21 @@ const titleInput = document.getElementById("title-input");
         updateURLState();
         renderTasks();
     });
-    
+
     sortSelect.addEventListener("change", (e) => {
         currentSort = e.target.value;
         updateURLState();
         renderTasks();
     });
-    
-    titleInput.addEventListener("input", () => {
-        renderTasks(); // Immediately filter tasks when typing in the title input
-    });
-    
 
-    // Create a task element
+    titleInput.addEventListener("input", () => renderTasks());
+
     function createTaskElement(task) {
         const el = document.createElement("article");
         el.className = "plan-box";
         el.dataset.id = task.id;
         el.draggable = true;
+
         if (task.completed) el.classList.add("completed");
         if (selectedTaskIds.has(task.id)) el.classList.add("selected");
 
@@ -138,19 +135,12 @@ const titleInput = document.getElementById("title-input");
                 lastSelectedIndex = idx;
             }
             renderTasks();
-            ShowInfo(task); 
+            ShowInfo(task);
         });
-        
-        
-        // Toggle completion and delete task if marked completed
+
+        // Toggle completion (but don’t delete)
         el.querySelector(".complete-check").addEventListener("change", () => {
             task.completed = !task.completed;
-
-            // Auto-delete if marked as completed
-            if (task.completed) {
-                tasks = tasks.filter(t => t.id !== task.id);
-            }
-
             saveTasks();
             renderTasks();
         });
@@ -164,8 +154,6 @@ const titleInput = document.getElementById("title-input");
 
             dialog.showModal();
             createButton.innerText = "edit";
-
-            // Temporarily remove create function and set up save function
             createButton.removeEventListener("click", handleCreate);
 
             const onSave = () => {
@@ -174,20 +162,14 @@ const titleInput = document.getElementById("title-input");
                 task.category = categoryDialog.value;
                 task.deadline = deadlineDialog.value;
 
-                el.querySelector(".title-text").textContent = task.title;
-                el.querySelector(".desc-text").textContent = task.description;
-
                 saveTasks();
                 dialog.close();
-
-                // After editing, restore create mode
                 createButton.innerText = "create";
                 createButton.removeEventListener("click", onSave);
                 createButton.addEventListener("click", handleCreate);
                 clearDialog();
             };
 
-            // Attach save handler
             createButton.addEventListener("click", onSave);
         });
 
@@ -212,7 +194,6 @@ const titleInput = document.getElementById("title-input");
         return el;
     }
 
-    // Handle drag-and-drop reordering of tasks
     container.addEventListener("dragover", (e) => {
         e.preventDefault();
         const dragging = document.querySelector(".dragging");
@@ -242,15 +223,12 @@ const titleInput = document.getElementById("title-input");
             </section>
         `;
         infoDialog.showModal();
-    
-        // Add close listener
+
         document.getElementById("close-info-btn").addEventListener("click", () => {
             infoDialog.close();
         });
     }
-    
 
-    // Create new task handler
     function handleCreate() {
         const title = titleDialog.value.trim();
         const description = descDialog.value.trim();
@@ -268,34 +246,34 @@ const titleInput = document.getElementById("title-input");
         };
 
         tasks.push(task);
+
+        // Cap total to 20, remove oldest
+        if (tasks.length > 20) {
+            tasks.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
+            tasks = tasks.slice(tasks.length - 20);
+        }
+
+        // Reassign order
+        tasks.forEach((t, idx) => t.order = idx);
+
         saveTasks();
         dialog.close();
         clearDialog();
         renderTasks();
     }
 
-    // Set up event listeners for creating new tasks
-    createButton.addEventListener("click",handleCreate);
+    createButton.addEventListener("click", handleCreate);
 
-    // Open dialog for adding new task
-    openButton.addEventListener("click", () =>  {
+    openButton.addEventListener("click", () => {
         dialog.showModal();
         clearDialog();
-});
+    });
 
-    // Close dialog
     closeButton.addEventListener("click", () => {
         clearDialog();
         dialog.close();
-        createButton.innerText = "create"; // Restore create mode
+        createButton.innerText = "create";
         createButton.removeEventListener("click", handleCreate);
-        createButton.addEventListener("click", handleCreate); // Rebind create handler
+        createButton.addEventListener("click", handleCreate);
     });
-
-    // Filter tasks
-    filterSelect.addEventListener("change", (e) => {
-        currentFilter = e.target.value;
-        updateURLState();
-        renderTasks();
-    });
-};
+}
