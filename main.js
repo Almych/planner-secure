@@ -24,7 +24,10 @@ function initializeApp(tasksRef) {
     const descDialog = document.getElementById("dialog-desc");
     const categoryDialog = document.getElementById("category");
     const deadlineDialog = document.getElementById("datetime");
-    const filterSelect = document.getElementById("filter-button");
+    const filterSelect = document.getElementById("filter-select");
+const sortSelect = document.getElementById("sort-select");
+const titleInput = document.getElementById("title-input");
+
 
     let tasks = [];
     tasksRef.on("value", (snapshot) => {
@@ -58,18 +61,52 @@ function initializeApp(tasksRef) {
     }
     // Render tasks based on filter and sort
     function renderTasks() {
-        container.innerHTML = "";
+        container.innerHTML = ""; // Clear existing tasks
+    
         let filtered = [...tasks];
+    
+        // Apply filter logic
+        if (currentFilter === "completed") {
+            filtered = filtered.filter(t => t.completed);
+        } else if (currentFilter === "incomplete") {
+            filtered = filtered.filter(t => !t.completed);
+        }
+    
+        // Apply sorting logic
+        if (currentSort === "title") {
+            filtered.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (currentSort === "date") {
+            filtered.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
+        } else if (currentSort === "status") {
+            filtered.sort((a, b) => a.completed - b.completed);
+        }
 
-        if (currentFilter === "completed") filtered = filtered.filter(t => t.completed);
-        else if (currentFilter === "incomplete") filtered = filtered.filter(t => !t.completed);
 
-        if (currentSort === "title") filtered.sort((a, b) => a.title.localeCompare(b.title));
-        else if (currentSort === "date") filtered.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
-        else if (currentSort === "status") filtered.sort((a, b) => a.completed - b.completed);
-
+        if (titleInput.value.trim() !== "") {
+            filtered = filtered.filter(task => task.title.toLowerCase().includes(titleInput.value.trim().toLowerCase()));
+        }
+    
+        // Render filtered and sorted tasks
         filtered.forEach(task => container.appendChild(createTaskElement(task)));
     }
+    
+
+    filterSelect.addEventListener("change", (e) => {
+        currentFilter = e.target.value;
+        updateURLState();
+        renderTasks();
+    });
+    
+    sortSelect.addEventListener("change", (e) => {
+        currentSort = e.target.value;
+        updateURLState();
+        renderTasks();
+    });
+    
+    titleInput.addEventListener("input", () => {
+        renderTasks(); // Immediately filter tasks when typing in the title input
+    });
+    
 
     // Create a task element
     function createTaskElement(task) {
@@ -85,8 +122,8 @@ function initializeApp(tasksRef) {
             <section class="desc-wrap"><p class="desc-text">${task.description}</p></section>
             <section class="status-wrap">
                 <input type="checkbox" ${task.completed ? "checked" : ""} class="complete-check">
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
+                <button class="edit-button">✏️</button>
+                <button class="delete-button">🗑️</button>
             </section>
         `;
 
@@ -104,7 +141,7 @@ function initializeApp(tasksRef) {
             ShowInfo(task); 
         });
         
-
+        
         // Toggle completion and delete task if marked completed
         el.querySelector(".complete-check").addEventListener("change", () => {
             task.completed = !task.completed;
@@ -119,7 +156,7 @@ function initializeApp(tasksRef) {
         });
 
         // Edit task
-        el.querySelector(".edit-btn").addEventListener("click", () => {
+        el.querySelector(".edit-button").addEventListener("click", () => {
             titleDialog.value = task.title;
             descDialog.value = task.description;
             categoryDialog.value = task.category;
@@ -155,7 +192,7 @@ function initializeApp(tasksRef) {
         });
 
         // Delete task
-        el.querySelector(".delete-btn").addEventListener("click", () => {
+        el.querySelector(".delete-button").addEventListener("click", () => {
             tasks = tasks.filter(t => t.id !== task.id);
             saveTasks();
             renderTasks();
@@ -242,8 +279,8 @@ function initializeApp(tasksRef) {
 
     // Open dialog for adding new task
     openButton.addEventListener("click", () =>  {
-        dialog.showModal(),
-        clearDialog
+        dialog.showModal();
+        clearDialog();
 });
 
     // Close dialog
@@ -260,6 +297,5 @@ function initializeApp(tasksRef) {
         currentFilter = e.target.value;
         updateURLState();
         renderTasks();
-        ///dssd
     });
 };

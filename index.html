@@ -9,12 +9,20 @@
 <body>
     <header>
         <section class="nav-bar">
-            <input type="text" placeholder="Enter text...">
-           <select name="Filter" id="filter-button">
-            <option value="title">filter by title</option>
-            <option value="date">filter by date</option>
-            <option value="status">filter by status</option>
-           </select>
+            <input type="text" placeholder="Enter text..." id="title-input">
+            
+            <select name="Filter" id="filter-select">
+                <option value="all">All</option>
+                <option value="completed">Completed</option>
+                <option value="incomplete">Incomplete</option>
+            </select>
+            
+            <select name="Sort" id="sort-select">
+                <option value="title">Sort by Title</option>
+                <option value="date">Sort by Date</option>
+                <option value="status">Sort by Status</option>
+            </select>
+  
            <button id="add-button">create plan</button>
         </section>
     </header>
@@ -33,7 +41,6 @@
              <option value="work">work</option>
              <option value="hobby">hobby</option>
              <option value="free">free</option>
-             <option value="other">create new</option>
          </select>
          <input type="datetime-local" id="datetime" class="hidden-input">
          <section class="dialog-action">
