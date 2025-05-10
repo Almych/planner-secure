@@ -29,7 +29,7 @@ function initializeApp(tasksRef) {
     const titleInput = document.getElementById("title-input");
 
     let tasks = [];
-    tasksRef.on("value", (snapshot) => {
+    tasksRef.once("value", (snapshot) => {
         tasks = snapshot.val() || [];
         renderTasks();
     });
@@ -68,7 +68,6 @@ function initializeApp(tasksRef) {
             filtered = filtered.filter(task => task.title.toLowerCase().includes(q));
         }
     
-        // Apply filter
       
     
         // Apply sort
