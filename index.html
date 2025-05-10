@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Own plans</title>
 </head>
 <body>
+ <dialog id="auth-dialog" class="auth-dialog">
+  <section class="auth-container">
+    <h2>Welcome</h2>
+    <input type="email" id="auth-email" placeholder="Email" required class="black-color">
+    <input type="password" id="auth-password" placeholder="Password" required class="black-color">
+    <section class="auth-buttons">
+      <button id="login-btn">Login</button>
+      <button id="register-btn">Register</button>
+    </section>
+  </section>
+</dialog>
+
     <header>
         <section class="nav-bar">
             <input type="text" placeholder="Enter text..." id="title-input">
@@ -24,6 +36,9 @@
             </select>
   
            <button id="add-button">create plan</button>
+            <a href="public-index.html">
+            <button id="public-button">see others plans</button>
+            </a>
         </section>
     </header>
     <main>
@@ -55,6 +70,7 @@
      </dialog>
      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
      <script src="main.js"></script>     
 </body>
 </html>

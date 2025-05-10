@@ -1,16 +1,46 @@
 document.addEventListener("DOMContentLoaded", () => {
-    fetch('https://online-planner.onrender.com/api/config')
+   fetch('https://online-planner.onrender.com/api/config')
         .then(response => response.json())
         .then(config => {
             const firebaseApp = firebase.initializeApp(config);
-            const db = firebaseApp.database();
-            const tasksRef = db.ref("tasks");
-            initializeApp(tasksRef);
+
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    const db = firebaseApp.database();
+                    const tasksRef = db.ref(`users/${user.uid}/tasks`);
+                    initializeApp(tasksRef);
+                } else {
+                    showAuthDialog(); 
+                }
+            });
         })
         .catch(error => {
             console.error("Error fetching Firebase config:", error);
         });
 });
+
+
+function showAuthDialog() {
+    const dialog = document.getElementById('auth-dialog');
+    const emailInput = document.getElementById('auth-email');
+    const passwordInput = document.getElementById('auth-password');
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+
+    dialog.showModal();
+
+    loginBtn.onclick = () => {
+        firebase.auth().signInWithEmailAndPassword(emailInput.value, passwordInput.value)
+            .then(() => dialog.close())
+            .catch(err => alert(err.message));
+    };
+
+    registerBtn.onclick = () => {
+        firebase.auth().createUserWithEmailAndPassword(emailInput.value, passwordInput.value)
+            .then(() => dialog.close())
+            .catch(err => alert(err.message));
+    };
+}
 
 
 function initializeApp(tasksRef) {
@@ -276,3 +306,4 @@ function initializeApp(tasksRef) {
         createButton.addEventListener("click", handleCreate);
     });
 }
+

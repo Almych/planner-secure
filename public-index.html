@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public-style.css">
+    <title>Public plans</title>
+</head>
+<body>
+    <header>
+        <section class="nav-bar">
+            <input type="text" placeholder="Enter text..." id="title-input">
+            
+            <select name="Filter" id="filter-select">
+                <option value="all">All</option>
+            </select>
+            
+            <select name="Sort" id="sort-select">
+                <option value="title">Sort by Title</option>
+                <option value="date">Sort by Date</option>
+                <option value="user">Sort by User</option>
+            </select>
+  
+           <a href="index.html"><button id="private-plans">see my plans</button></a>
+        </section>
+    </header>
+     <main>
+        <section id="plan-bar">
+            <section id="plan-container">
+            </section>
+        </section>
+    </main>
+    <dialog id="plan-card">
+         
+     </dialog>
+ <!-- Planets -->
+<div class="planet blue" style="top: 200px; left: 75%; width: 70px; height: 70px;"></div>
+<div class="planet red" style="top: 600px; left: 15%; width: 90px; height: 90px;"></div>
+<div class="planet green" style="top: 800px; left: 60%; width: 60px; height: 60px;"></div>
+
+<!-- Stars -->
+<div class="star" style="top: 10%; left: 10%;"></div>
+<div class="star" style="top: 20%; left: 50%;"></div>
+<div class="star" style="top: 40%; left: 80%;"></div>
+<div class="star" style="top: 70%; left: 25%;"></div>
+<div class="star" style="top: 90%; left: 60%;"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+          <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="core.js"></script>
+</body>
+</html>

@@ -101,6 +101,8 @@
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
     border: 1px solid rgba(0, 255, 255, 0.2);
   }
+
+  
   
   /* Scrollbar Track */
 #plan-container::-webkit-scrollbar {
@@ -295,3 +297,58 @@
     }
   }
   
+  .black-color {
+    color: black;
+  }
+
+  .auth-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.auth-dialog {
+  border: none;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 300px;
+  max-width: 90%;
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-container h2 {
+  text-align: center;
+  margin: 0;
+}
+
+.auth-container input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.auth-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.auth-buttons button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.auth-buttons button:hover {
+  background: #2563eb;
+}

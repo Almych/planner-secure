@@ -1,0 +1,284 @@
+/* Cosmic Theme Variables */
+:root {
+  --cosmic-bg: linear-gradient(160deg, #0a0a23, #1a1a40);
+  --cosmic-glow: #00ffee;
+  --cosmic-accent: #ff00cc;
+  --cosmic-text: #f0f8ff;
+  --cosmic-panel: rgba(255, 255, 255, 0.05);
+}
+
+/* Body */
+body {
+  margin: 0;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  background-color: #0a0a23; /* Fallback color */
+  background-image: 
+    linear-gradient(rgba(10, 10, 35, 0.9), rgba(10, 10, 35, 0.9)), 
+    url('https://images.unsplash.com/photo-1549887534-4e8abc19f1e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--cosmic-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::-webkit-scrollbar {
+    width: 0px;
+}
+
+body::-webkit-scrollbar-track {
+    background: none;
+}
+
+body::-webkit-scrollbar-thumb {
+    background:none;
+    box-shadow: none;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background:none;
+    box-shadow: none
+}
+
+option {
+    background-color: #1a1a40;
+    color: white;
+    border-radius: 0 0 1rem 1rem;
+    padding: 0.5rem;
+  }
+
+/* Navigation Bar */
+.nav-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background-color: rgba(10, 10, 50, 0.9);
+  box-shadow: 0 0 20px var(--cosmic-glow);
+  border-bottom: 2px solid var(--cosmic-glow);
+  border-radius: 0 0 1rem 1rem;
+  flex-wrap: wrap;
+}
+
+
+/* Inputs, Selects, and Buttons */
+.nav-bar input,
+.nav-bar select,
+.nav-bar button {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--cosmic-glow);
+  color: var(--cosmic-text);
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  backdrop-filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+.nav-bar input:focus,
+.nav-bar select:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--cosmic-accent);
+}
+
+.nav-bar button {
+  background: linear-gradient(135deg, var(--cosmic-accent), var(--cosmic-glow));
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--cosmic-glow);
+}
+
+.nav-bar button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--cosmic-accent);
+}
+
+/* Plan Section */
+#plan-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Plan Card */
+.plan-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--cosmic-glow);
+  box-shadow: 0 0 15px var(--cosmic-glow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.plan-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 25px var(--cosmic-accent);
+}
+
+.title-text, .desc-text {
+  margin: 0;
+  color: var(--cosmic-text);
+  font-size: 1.1rem;
+  text-shadow: 0 0 5px var(--cosmic-glow);
+  word-break: break-word;
+}
+
+/* Scrollbar Styling */
+#plan-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+#plan-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#plan-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--cosmic-accent), var(--cosmic-glow));
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--cosmic-glow);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .nav-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-bar input,
+  .nav-bar select,
+  .nav-bar button {
+    width: 100%;
+  }
+}
+
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+  opacity: 0.2;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Glowing planet prop */
+.planet {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 30% 30%, #b7d410, #0a0a23);
+  border-radius: 50%;
+  box-shadow: 0 0 30px var(--cosmic-accent);
+  animation: float 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+/* Varying planet colors */
+.planet.blue {
+  background: radial-gradient(circle at 30% 30%, #00bfff, #0a0a23);
+  box-shadow: 0 0 30px #00bfff;
+}
+.planet.green {
+  background: radial-gradient(circle at 30% 30%, #32cd32, #0a0a23);
+  box-shadow: 0 0 30px #32cd32;
+}
+.planet.red {
+  background: radial-gradient(circle at 30% 30%, #ff4500, #0a0a23);
+  box-shadow: 0 0 30px #ff4500;
+}
+
+/* More stars with glow */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s infinite;
+  box-shadow: 0 0 6px white;
+}
+
+
+@keyframes float {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+}
+
+
+/* Plan Card Dialog Styling */
+#plan-card {
+  border: none;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: rgba(10, 10, 50, 0.95);
+  box-shadow: 0 0 30px var(--cosmic-accent), inset 0 0 10px var(--cosmic-glow);
+  color: var(--cosmic-text);
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  font-family: 'Orbitron', sans-serif;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10;
+  animation: pop-in 0.4s ease-out;
+}
+
+/* Dialog open animation */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Close button */
+#plan-card::after {
+  content: '✖';
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  color: var(--cosmic-accent);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+#plan-card::after:hover {
+  transform: scale(1.2);
+  text-shadow: 0 0 8px var(--cosmic-accent);
+}
+
+/* Inside content (optional, customize further) */
+#plan-card h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: var(--cosmic-glow);
+  text-shadow: 0 0 6px var(--cosmic-glow);
+}
+
+#plan-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--cosmic-text);
+  text-shadow: 0 0 3px var(--cosmic-accent);
+}
