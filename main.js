@@ -68,6 +68,8 @@ function initializeApp(tasksRef) {
     let lastSelectedIndex = null;
     let currentFilter = new URLSearchParams(location.search).get("filter") || "all";
     let currentSort = new URLSearchParams(location.search).get("sort") || "date";
+    filterSelect.value = currentFilter;
+    sortSelect.value = currentSort;
 
     function saveTasks() {
         tasksRef.set(tasks);
