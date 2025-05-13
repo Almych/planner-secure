@@ -67,7 +67,7 @@ function initializeApp(tasksRef) {
     let selectedTaskIds = new Set();
     let lastSelectedIndex = null;
     let currentFilter = new URLSearchParams(location.search).get("filter") || "all";
-    let currentSort = new URLSearchParams(location.search).get("sort") || "date";
+    let currentSort = new URLSearchParams(location.search).get("sort") || "title";
     filterSelect.value = currentFilter;
     sortSelect.value = currentSort;
 
@@ -89,38 +89,36 @@ function initializeApp(tasksRef) {
         deadlineDialog.value = "";
     }
 
-    function renderTasks() {
-        container.innerHTML = "";
-    
-        let filtered = [...tasks];
-    
-        // Apply title search first
-        if (titleInput.value.trim() !== "") {
-            const q = titleInput.value.trim().toLowerCase();
-            filtered = filtered.filter(task => task.title.toLowerCase().includes(q));
-        }
-    
-      
-    
-        // Apply sort
-        if (currentSort === "title") {
-            filtered.sort((a, b) => a.title.localeCompare(b.title));
-        } else if (currentSort === "date") {
-            filtered.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
-        } else if (currentSort === "status") {
-            if (currentFilter === "completed") {
-                filtered = filtered.filter(t => t.completed);
-            } else if (currentFilter === "incomplete") {
-                filtered = filtered.filter(t => !t.completed);
-            } else {
-                // Default: hide completed unless explicitly filtered
-                filtered = filtered.filter(t => !t.completed);
-            }
-        }
-    
-        filtered.forEach(task => container.appendChild(createTaskElement(task)));
+   function renderTasks() {
+    container.innerHTML = "";
+
+    let filtered = [...tasks];
+
+    // Apply filter
+    if (currentFilter === "completed") {
+        filtered = filtered.filter(t => t.completed);
+    } else if (currentFilter === "incompleted") {
+        filtered = filtered.filter(t => !t.completed);
     }
-    
+
+    // Apply search filter
+    if (titleInput.value.trim() !== "") {
+        const q = titleInput.value.trim().toLowerCase();
+        filtered = filtered.filter(task => task.title.toLowerCase().includes(q));
+    }
+
+    // Apply sort
+    if (currentSort === "title") {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (currentSort === "date") {
+        filtered.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
+    } else if (currentSort === "status") {
+        filtered.sort((a, b) => a.completed - b.completed);
+    }
+
+    filtered.forEach(task => container.appendChild(createTaskElement(task)));
+}
+
 
     filterSelect.addEventListener("change", (e) => {
         currentFilter = e.target.value;
