@@ -94,20 +94,17 @@ function initializeApp(tasksRef) {
 
     let filtered = [...tasks];
 
-    // Apply filter
     if (currentFilter === "completed") {
         filtered = filtered.filter(t => t.completed);
     } else if (currentFilter === "incompleted") {
         filtered = filtered.filter(t => !t.completed);
     }
 
-    // Apply search filter
     if (titleInput.value.trim() !== "") {
         const q = titleInput.value.trim().toLowerCase();
         filtered = filtered.filter(task => task.title.toLowerCase().includes(q));
     }
 
-    // Apply sort
     if (currentSort === "title") {
         filtered.sort((a, b) => a.title.localeCompare(b.title));
     } else if (currentSort === "date") {
@@ -167,14 +164,12 @@ function initializeApp(tasksRef) {
             ShowInfo(task);
         });
 
-        // Toggle completion (but don’t delete)
         el.querySelector(".complete-check").addEventListener("change", () => {
             task.completed = !task.completed;
             saveTasks();
             renderTasks();
         });
 
-        // Edit task
         el.querySelector(".edit-button").addEventListener("click", () => {
             titleDialog.value = task.title;
             descDialog.value = task.description;
@@ -202,7 +197,6 @@ function initializeApp(tasksRef) {
             createButton.addEventListener("click", onSave);
         });
 
-        // Delete task
         el.querySelector(".delete-button").addEventListener("click", () => {
             tasks = tasks.filter(t => t.id !== task.id);
             saveTasks();
@@ -276,13 +270,11 @@ function initializeApp(tasksRef) {
 
         tasks.push(task);
 
-        // Cap total to 20, remove oldest
         if (tasks.length > 20) {
             tasks.sort((a, b) => new Date(a.createTime) - new Date(b.createTime));
             tasks = tasks.slice(tasks.length - 20);
         }
 
-        // Reassign order
         tasks.forEach((t, idx) => t.order = idx);
 
         saveTasks();
